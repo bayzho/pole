@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f1f0e9">
+  <meta name="description" content="СЕЙЧАС — мировой журнал новостей. Коротко о важном, с контекстом и ссылками на источники.">
+  <title>СЕЙЧАС — мир в фокусе</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/mobile.css">
+  <style>body.booting{background:#fff}body.booting .shell{max-width:none;padding:0}body.booting .header,body.booting .footer{display:none}body.booting #app{min-height:100svh;display:grid;place-items:center}body.booting .error-screen{min-height:100svh}body.booting .error-screen img{display:block;width:min(100vw,177.78vh,1200px);height:auto;max-height:100vh;object-fit:contain}</style>
+</head>
+<body class="booting">
+  <div class="shell">
+    <header class="header">
+      <a class="logo" href="/" aria-label="Сейчас — главная">СЕЙЧАС<span>●</span></a>
+      <div class="edition">МИРОВОЙ ОБЗОР <i></i> 29 ОКТЯБРЯ 2026</div>
+      <nav aria-label="Главная навигация"><a href="/" data-nav="home">Лента</a><a href="/about" data-nav="about">О проекте</a></nav>
+      <button class="theme" id="theme" aria-label="Переключить тему">◐</button>
+    </header>
+    <main id="app" tabindex="-1"><section class="error-screen"><img src="/assets/oshibki-sajta.jpg" alt="404 — страница не найдена"></section></main>
+    <footer class="footer"><a class="logo small" href="/">СЕЙЧАС<span>●</span></a><span>МЕНЬШЕ ШУМА. БОЛЬШЕ КОНТЕКСТА.</span><span>© 2026</span></footer>
+  </div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
