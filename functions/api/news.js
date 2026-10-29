@@ -1,4 +1,4 @@
-const stories = [
+export const stories = [
   {id:"01",region:"Европа",title:"Европейские страны согласовали новые вложения в чистую энергетику",description:"Совместный план направит средства на модернизацию сетей, хранение энергии и поддержку региональных проектов.",source:"DW",time:"15 минут назад",url:"https://www.dw.com/en/top-stories/s-9097",image:"https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1400&q=80",alt:"Вечерний европейский город",body:"Правительства европейских стран представили согласованный план инвестиций в энергетическую инфраструктуру. Среди приоритетов — обновление электрических сетей, создание систем хранения и развитие возобновляемых источников энергии.\n\nЭксперты отмечают, что темпы изменений будут зависеть от финансирования и того, насколько быстро страны согласуют общие правила. Подробности опубликованы в материале DW."},
   {id:"02",region:"Азия",title:"Страны Тихоокеанского региона открыли новый диалог о морской безопасности",description:"На встрече обсуждают торговые маршруты, обмен данными и снижение напряжённости в регионе.",source:"Al Jazeera",time:"32 минуты назад",url:"https://www.aljazeera.com/news/",image:"https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=1000&q=80",alt:"Ночной город Токио"},
   {id:"03",region:"Америка",title:"Американские города расширяют планы защиты от экстремальной жары",description:"Муниципалитеты открывают прохладные общественные пространства и усиливают систему ранних предупреждений.",source:"BBC",time:"48 минут назад",url:"https://www.bbc.com/news/world",image:"https://images.unsplash.com/photo-1494522358652-f30e61a60313?auto=format&fit=crop&w=1000&q=80",alt:"Городская улица в солнечный день"},
@@ -11,6 +11,14 @@ const stories = [
   {id:"10",region:"Ближний Восток",title:"Музеи региона готовят общую цифровую коллекцию исторических архивов",description:"В открытом каталоге соберут карты, рукописи и материалы о городской жизни.",source:"DW",time:"6 часов назад",url:"https://www.dw.com/en/top-stories/s-9097",image:"https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1000&q=80",alt:"Архитектура древнего города"}
 ];
 
-export async function onRequestGet() {
+export async function onRequestGet({env}) {
+  if (env.NEWS_DB) {
+    const {results=[]} = await env.NEWS_DB.prepare(
+      "SELECT id, region, title, description, source, time, url, image, alt, body FROM news ORDER BY created_at DESC"
+    ).all();
+    if (results.length) {
+      return Response.json({mode:"database",stories:results},{headers:{"cache-control":"no-store"}});
+    }
+  }
   return Response.json({mode:"demo",stories},{headers:{"cache-control":"public, max-age=300"}});
 }

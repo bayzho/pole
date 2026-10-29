@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f1f0e9">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Админ-панель — СЕЙЧАС</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <a class="brand" href="/">СЕЙЧАС<span>●</span></a>
+      <span class="admin-label">РЕДАКЦИОННАЯ ПАНЕЛЬ</span>
+      <a class="back-link" href="/">На сайт ↗</a>
+    </header>
+
+    <section id="login-view" class="login-card">
+      <div class="kicker">ДОСТУП РЕДАКЦИИ</div>
+      <h1>Новости под рукой.</h1>
+      <p>Введите пароль администратора, чтобы управлять лентой.</p>
+      <form id="login-form">
+        <label for="admin-password">Пароль администратора</label>
+        <input id="admin-password" type="password" autocomplete="current-password" required>
+        <button class="button primary" type="submit">Войти <span>→</span></button>
+        <p class="message" id="login-message" role="status"></p>
+      </form>
+    </section>
+
+    <section id="panel-view" class="panel" hidden>
+      <div class="panel-title">
+        <div><div class="kicker">КОНТЕНТ САЙТА</div><h1>Лента новостей</h1></div>
+        <button id="logout-button" class="button quiet" type="button">Выйти</button>
+      </div>
+      <div class="panel-layout">
+        <section class="editor-card">
+          <div class="editor-heading"><div><div class="kicker">РЕДАКТОР</div><h2 id="form-heading">Добавить новость</h2></div><button id="reset-button" class="text-button" type="button">Очистить</button></div>
+          <form id="story-form">
+            <input id="story-id" type="hidden">
+            <label for="title">Заголовок</label><input id="title" name="title" maxlength="220" required>
+            <label for="description">Краткое описание</label><textarea id="description" name="description" rows="3" maxlength="600" required></textarea>
+            <div class="form-row">
+              <div><label for="region">Регион</label><select id="region" name="region"><option>Европа</option><option>Азия</option><option>Америка</option><option>Африка</option><option>Ближний Восток</option><option>Мир</option></select></div>
+              <div><label for="source">Источник</label><input id="source" name="source" maxlength="80" placeholder="BBC, DW…" required></div>
+            </div>
+            <div class="form-row">
+              <div><label for="time">Время публикации</label><input id="time" name="time" maxlength="80" value="Только что" required></div>
+              <div><label for="alt">Подпись к изображению</label><input id="alt" name="alt" maxlength="240"></div>
+            </div>
+            <label for="url">Ссылка на оригинал</label><input id="url" name="url" type="url" placeholder="https://…" required>
+            <label for="image">Ссылка на изображение</label><input id="image" name="image" type="url" placeholder="https://…" required>
+            <label for="body">Текст обзора <span class="optional">необязательно</span></label><textarea id="body" name="body" rows="6" maxlength="20000" placeholder="Короткий обзор, не полный текст источника"></textarea>
+            <p id="form-message" class="message" role="status"></p>
+            <button id="save-button" class="button primary" type="submit">Опубликовать <span>→</span></button>
+          </form>
+        </section>
+        <section class="stories-card">
+          <div class="editor-heading"><div><div class="kicker">ОПУБЛИКОВАНО</div><h2 id="story-count">Новости</h2></div><button id="refresh-button" class="text-button" type="button">Обновить ↻</button></div>
+          <div id="stories-list" class="stories-list" aria-live="polite"></div>
+        </section>
+      </div>
+    </section>
+    <footer>Управление доступно по паролю. Новости сохраняются в базе Cloudflare D1.</footer>
+  </main>
+</body>
+</html>

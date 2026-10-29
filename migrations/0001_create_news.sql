@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS news (
+  id TEXT PRIMARY KEY,
+  region TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  source TEXT NOT NULL,
+  time TEXT NOT NULL,
+  url TEXT NOT NULL,
+  image TEXT NOT NULL,
+  alt TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS news_created_at_idx ON news(created_at DESC);
+
+CREATE TABLE IF NOT EXISTS app_meta (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
