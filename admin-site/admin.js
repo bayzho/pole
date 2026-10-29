@@ -1,4 +1,5 @@
 const $=selector=>document.querySelector(selector);
+const API_BASE=(window.SEYCHAS_API_BASE||'https://seychas-world-news.pages.dev').replace(/\/$/,'');
 const loginView=$('#login-view');
 const panelView=$('#panel-view');
 const loginForm=$('#login-form');
@@ -9,7 +10,7 @@ let stories=[];
 const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 async function api(method='GET',body,id){
-  const url='/api/admin/news'+(id?'?id='+encodeURIComponent(id):'');
+  const url=API_BASE+'/api/admin/news'+(id?'?id='+encodeURIComponent(id):'');
   const response=await fetch(url,{method,headers:{'authorization':'Bearer '+token,'content-type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
   const data=await response.json().catch(()=>({error:'Сервер вернул некорректный ответ.'}));
   if(!response.ok)throw new Error(data.error||'Не удалось выполнить запрос.');
