@@ -24,8 +24,10 @@
     <section id="login-view" class="login-card">
       <div class="kicker">ДОСТУП РЕДАКЦИИ</div>
       <h1>Новости под рукой.</h1>
-      <p>Введите пароль администратора, чтобы управлять лентой.</p>
+      <p>Введите логин и пароль администратора, чтобы управлять лентой.</p>
       <form id="login-form">
+        <label for="admin-email">Логин / email</label>
+        <input id="admin-email" type="email" autocomplete="username" required>
         <label for="admin-password">Пароль администратора</label>
         <input id="admin-password" type="password" autocomplete="current-password" required>
         <button class="button primary" type="submit">Войти <span>→</span></button>

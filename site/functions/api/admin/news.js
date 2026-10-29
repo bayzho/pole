@@ -27,10 +27,12 @@ function authorize(context) {
   if (!context.env.NEWS_ADMIN_ORIGIN || origin !== context.env.NEWS_ADMIN_ORIGIN) {
     return json(context, {error:"Запрос разрешён только с сайта админ-панели."}, 403);
   }
+  const email = context.env.NEWS_ADMIN_EMAIL;
   const password = context.env.NEWS_ADMIN_PASSWORD;
-  if (!password) return json(context, {error:"Админ-панель ещё не настроена на сервере."}, 503);
+  if (!email || !password) return json(context, {error:"Логин и пароль админ-панели ещё не настроены на сервере."}, 503);
+  const submittedEmail = context.request.headers.get("x-admin-email") || "";
   const token = context.request.headers.get("authorization") || "";
-  if (!token.startsWith("Bearer ") || !sameSecret(token.slice(7), password)) {
+  if (!sameSecret(submittedEmail, email) || !token.startsWith("Bearer ") || !sameSecret(token.slice(7), password)) {
     return json(context, {error:"Неверный пароль."}, 401);
   }
   if (!context.env.NEWS_DB) return json(context, {error:"База новостей не подключена."}, 503);
@@ -82,7 +84,7 @@ export async function onRequestOptions(context) {
   return new Response(null, {status:204, headers:{
     "access-control-allow-origin":context.env.NEWS_ADMIN_ORIGIN,
     "access-control-allow-methods":"GET, POST, PUT, DELETE, OPTIONS",
-    "access-control-allow-headers":"authorization, content-type",
+    "access-control-allow-headers":"authorization, content-type, x-admin-email",
     "access-control-max-age":"86400",
     "vary":"Origin"
   }});

@@ -5,13 +5,16 @@ const panelView=$('#panel-view');
 const loginForm=$('#login-form');
 const storyForm=$('#story-form');
 const fields=['region','title','description','source','time','url','image','alt','body'];
-let token=sessionStorage.getItem('seychas-admin-token')||'';
+let credentials={};
+try{credentials=JSON.parse(sessionStorage.getItem('seychas-admin-token')||'{}')}catch{}
+let token=credentials.password||'';
+let loginEmail=credentials.email||'';
 let stories=[];
 const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 async function api(method='GET',body,id){
   const url=API_BASE+'/api/admin/news'+(id?'?id='+encodeURIComponent(id):'');
-  const response=await fetch(url,{method,headers:{'authorization':'Bearer '+token,'content-type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+  const response=await fetch(url,{method,headers:{'authorization':'Bearer '+token,'x-admin-email':loginEmail,'content-type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
   const data=await response.json().catch(()=>({error:'Сервер вернул некорректный ответ.'}));
   if(!response.ok)throw new Error(data.error||'Не удалось выполнить запрос.');
   return data;
@@ -40,19 +43,20 @@ function fillForm(story){
   storyForm.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-async function signIn(password){
+async function signIn(email,password){
+  loginEmail=email;
   token=password;
   try{
     const result=await api();
     stories=result.stories||[];
-    sessionStorage.setItem('seychas-admin-token',token);
+    sessionStorage.setItem('seychas-admin-token',JSON.stringify({email:loginEmail,password:token}));
     showMessage('#login-message','');
     renderStories();
     setLoggedIn(true);
-  }catch(error){token='';showMessage('#login-message',error.message)}
+  }catch(error){token='';loginEmail='';showMessage('#login-message',error.message)}
 }
 
-loginForm.addEventListener('submit',event=>{event.preventDefault();signIn($('#admin-password').value)});
+loginForm.addEventListener('submit',event=>{event.preventDefault();signIn($('#admin-email').value.trim(),$('#admin-password').value)});
 storyForm.addEventListener('submit',async event=>{
   event.preventDefault();
   const id=$('#story-id').value;
@@ -77,6 +81,6 @@ $('#stories-list').addEventListener('click',async event=>{
 
 $('#reset-button').addEventListener('click',resetForm);
 $('#refresh-button').addEventListener('click',()=>loadStories().catch(error=>showMessage('#form-message',error.message)));
-$('#logout-button').addEventListener('click',()=>{token='';sessionStorage.removeItem('seychas-admin-token');setLoggedIn(false);$('#admin-password').value=''});
+$('#logout-button').addEventListener('click',()=>{token='';loginEmail='';sessionStorage.removeItem('seychas-admin-token');setLoggedIn(false);$('#admin-email').value='';$('#admin-password').value=''});
 
-if(token){signIn(token)}
+if(token&&loginEmail){signIn(loginEmail,token)}

@@ -48,10 +48,10 @@ NEWS_ADMIN_PASSWORD=local-test-password
 1. Войди в Cloudflare через Wrangler и создай базу: `npx wrangler d1 create seychas-news`.
 2. Из папки `site` выполни миграцию: `npx wrangler d1 migrations apply seychas-news --remote`.
 3. В настройках основного Pages-проекта добавь D1 binding с именем `NEWS_DB` и выбери базу `seychas-news`. После сохранения заново разверни проект.
-4. В **Settings → Variables and Secrets** основного проекта задай `NEWS_ADMIN_ORIGIN` и секрет `NEWS_ADMIN_PASSWORD` с длинным уникальным паролем. Сохрани и заново разверни проект.
+4. В **Settings → Variables and Secrets** основного проекта задай `NEWS_ADMIN_ORIGIN`, а также зашифрованные секреты `NEWS_ADMIN_EMAIL` и `NEWS_ADMIN_PASSWORD`. Email и пароль вносятся в Cloudflare, а не в файлы GitHub. Сохрани и заново разверни проект.
 5. Открой отдельный адрес админ-проекта, например `https://seychas-editor.pages.dev/`, и войди.
 
-API принимает административные запросы только с точного origin, заданного в `NEWS_ADMIN_ORIGIN`, и только с правильным паролем. Пароль хранится как Cloudflare Secret, не в коде.
+API принимает административные запросы только с точного origin, заданного в `NEWS_ADMIN_ORIGIN`, и только с правильной парой `NEWS_ADMIN_EMAIL` + `NEWS_ADMIN_PASSWORD`. Оба значения хранятся как Cloudflare Secrets, не в коде.
 
 Чтобы допускать ровно один аккаунт, дополнительно подключи к админ-сайту собственный домен и закрой его Cloudflare Access политикой **Allow → Emails → твой email**. Оставь также пароль панели включённым. Сам `admin-site/` лучше хранить в приватном GitHub-репозитории.
 
@@ -63,6 +63,7 @@ API принимает административные запросы толь�
 
 - `NEWS_DB` — D1 binding в основном Pages-проекте.
 - `NEWS_ADMIN_ORIGIN` — обычная переменная основного проекта с origin отдельной админки.
-- `NEWS_ADMIN_PASSWORD` — зашифрованный Cloudflare Secret для входа в панель.
+- `NEWS_ADMIN_EMAIL` — зашифрованный Cloudflare Secret с логином администратора.
+- `NEWS_ADMIN_PASSWORD` — зашифрованный Cloudflare Secret с паролем администратора.
 
 RSS/API ключ не нужен: сайт стартует с демо-новостями, которые можно редактировать в админке.
